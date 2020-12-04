@@ -8,7 +8,7 @@ const refs = {
   body: document.querySelector('body'),
 };
 
-refs.body.classList.add(Theme.LIGHT);
+setClassForTheme();
 
 refs.checkboxTheme.addEventListener('change', hendlerChangeTheme);
 
@@ -16,11 +16,24 @@ function hendlerChangeTheme() {
   if (!refs.checkboxTheme.checked) {
     refs.body.classList.add(Theme.LIGHT);
     refs.body.classList.remove(Theme.DARK);
+    localStorage.setItem('theme', Theme.LIGHT);
   } else {
     refs.body.classList.add(Theme.DARK);
     refs.body.classList.remove(Theme.LIGHT);
+    localStorage.setItem('theme', Theme.DARK);
   }
-  console.log(refs.checkboxTheme.checked); // false or true
 }
 
-console.log(hendlerChangeTheme);
+function setClassForTheme() {
+  const savedTheme = localStorage.getItem('theme'); // null,если первый раз зашел или значение,если изменял...
+
+  if (!savedTheme) {
+    refs.body.classList.add(Theme.LIGHT);
+  } else {
+    refs.body.classList.add(savedTheme);
+
+    if (savedTheme === Theme.DARK) {
+      refs.checkboxTheme.checked = true;
+    }
+  }
+}
